@@ -30,6 +30,9 @@ When the filtering is complete , the View listens for the changeset from the vie
 2. Go to src/test/java/com.example.measuredistance.viewmodel package in your Project View from Dropdown and right click on this package to select, `Run Tests in 'viewmodel'`
 <br>
 
+## Output
+### List of Customers residing within 100 km from the given location, sorted by their userID
+![Filtered Result](https://github.com/manasa-murali/MeasureDistance/blob/master/app/src/main/res/raw/measuredistance.gif)
 
 
 
