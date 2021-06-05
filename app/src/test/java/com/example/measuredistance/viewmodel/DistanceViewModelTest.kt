@@ -2,6 +2,7 @@ package com.example.measuredistance.viewmodel
 
 import com.example.measuredistance.repository.UserDataFetchRepository
 import com.example.measuredistance.utils.FilteredData
+import com.google.gson.Gson
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
+import okhttp3.OkHttpClient
 import org.junit.Before
 import org.junit.Test
 
@@ -19,7 +21,8 @@ import org.junit.Test
 
 class DistanceViewModelTest {
 
-    private val repository = mockk<UserDataFetchRepository>()
+    private val repository = mockk<UserDataFetchRepository>(relaxed = true)
+    private val okHttpClient = mockk<OkHttpClient>()
     private val viewModel: DistanceViewModel = DistanceViewModel(repository)
 
     @ExperimentalCoroutinesApi
@@ -47,6 +50,21 @@ class DistanceViewModelTest {
         assert(stateAfterFetchCall == filteredData)
         job.cancel()
 
+    }
+
+    @Test
+    fun `test if the given response string is parsed right`(){
+
+        val getCustomerDataFromResponseMethod = repository.javaClass.getDeclaredMethod(
+            "getCustomerDataFromResponse",
+          String::class.java
+        )
+
+        getCustomerDataFromResponseMethod.isAccessible = true
+
+        val result = getCustomerDataFromResponseMethod.invoke(UserDataFetchRepository(okHttpClient,Gson()), dummyData)
+
+        assert(result == customerDataList )
     }
 
 
